@@ -1,4 +1,4 @@
-import google.generativeai as genai,google
+import google.generativeai as genai
 import streamlit as st
 import os
 from PyPDF2 import PdfReader
