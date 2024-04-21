@@ -1,0 +1,4 @@
+google
+streamlit
+PyPDF2
+python-pptx
