@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import streamlit as st
 import os
-from PyPDF2 import PdfReader
+import PyPDF2
 
 api = "AIzaSyB7R_31L1M5H3Qjwqd1LKy3QrHPM2zMbZM"
 genai.configure(api_key=api)
@@ -11,16 +11,16 @@ model = genai.GenerativeModel(model_name="gemini-pro")
 
 
 def read_pdf(file):
-    # Create a PDF reader object
-    pdf_reader = PdfReader(file)
+    # Create a PDF file reader object
+    pdf_reader = PyPDF2.PdfFileReader(file)
     
     # Initialize an empty string to store the concatenated content
     full_text = ""
     
     # Loop through each page of the PDF
-    for page in pdf_reader.pages:
+    for page_num in range(pdf_reader.numPages):
         # Extract text from the current page
-        page_text = page.extract_text()
+        page_text = pdf_reader.getPage(page_num).extractText()
         
         # Append the page text to the full text string
         full_text += page_text
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                     {"parts": [{"text": pdf_content}], "role": "user"},
                     {"parts": [{"text": "okay. what do you want me to do ?"}], "role": "model"},
                     {"parts": [{"text": "now with the give data answer my questions in a detiled manner.strictly do not give the information which is beyond the given data. Help me to prepare for my exams explain all the things i should know related to the question asked."}], "role": "user"},
-                    {"parts": [{"text": "shure. i wll not give any information beyond the give context.i will defenitely help you for your exams.i will answer you in point of view of your exam."}], "role": "model"},
+                    {"parts": [{"text": "shure. i wll not give any information beyond the give context.i will defenitely help you for your exams."}], "role": "model"},
             ]
             chat = model.start_chat(history=hist)
         else:
@@ -67,7 +67,5 @@ if __name__ == "__main__":
     # Text input section
     st.header("Enter Text")
     text_input = st.text_input("Enter text here:")
-
     if st.button("Submit"):
-        responce = ask(text_input)
-        st.write(responce)
+        st.write(pdf_content)
